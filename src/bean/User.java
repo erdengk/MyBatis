@@ -8,14 +8,12 @@ public class User {
   `u_username` varchar(64) NOT NULL COMMENT '用户名',
   `u_password` varchar(64) DEFAULT NULL COMMENT '用户密码',
   `u_sex` varchar(16) DEFAULT NULL COMMENT '用户性别',
-  `u_createTime` datetime DEFAULT NULL COMMENT '用户创建时间',
   `u_cid` int(11) DEFAULT NULL COMMENT '用户国家id',
 	 */
 	private Integer u_id;
 	private String u_username;
 	private String u_password;
 	private String u_sex;
-
 	private Integer u_cid;
 	public Integer getU_id() {
 		return u_id;

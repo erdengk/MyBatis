@@ -2,37 +2,33 @@
 <!DOCTYPE mapper 
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-  
 <!--  
 <mapper namespace="UserMapper">
   <select id="selectBlog" resultType="Blog">
     select * from Blog where id = #{id}
   </select>
 </mapper>
+
+namespace    动态使用时  mapper1.UserMapper   使用 静态时 UserMapper
 -->
-  
-<mapper namespace="UserMapper">
+<mapper namespace="mapper1.UserMapper">
+
 	<select id="selectUserById" parameterType="Integer" resultType="bean.User">
 		select *from user where u_id=#{id}
 	</select>
-	
 	<!-- 使用占位符 解决sql注入问题   #{}-->
 	<!--  模糊查询    要使用 ${ value }  -->
 	<select id="selectUserByName" parameterType="String" resultType="bean.User">
 	<!-- select *from user where u_username like "%${value}%" -->
 	select *from user where u_username like "%"#{value}"%"
-	
 	</select>
 	<insert id="insertUser" parameterType="bean.User">	
-	insert into  user values ( null,#{u_username},#{u_password},#{u_sex},#{u_cid} )
+	insert into  user values (#{u_id},#{u_username},#{u_password},#{u_sex},#{u_cid})
 	</insert>
-	
 	<update id="updateUser" parameterType="bean.User">
 	update user set u_username=#{u_username} where u_id=#{u_id}
 	</update>
-	
 	<delete id="deleteUserById" parameterType="Integer">
 	delete from user where u_id=#{u_id}
 	</delete>
-	
 </mapper>
