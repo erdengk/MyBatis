@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mapper1.CountryMapper">
+  
+  <resultMap type="Country" id="country">
+  <!-- 手动映射  将 数据库中的 c_id   映射给  id -->
+  	<result property="id" column="c_id"/>
+  </resultMap>
+  <select id="selectAll" resultMap="country">
+  	select * from country
+  </select>
+  
+  
+<!-- 		//查询所有CountryVo
+	List<CountryVo> selectAllCountryVo(); -->
+	<resultMap type="CountryVo" id="countryVo">
+		<id property="id" column="c_id"/>
+		<result property="c_countryname" column="c_countryname"/>
+		<result property="c_capital" column="c_capital"/>
+		<!-- 一对多关系 -->
+		<collection property="userList" ofType="User">
+			<id property="u_id"  column="u_id"/>
+			<result property="u_username"  column="u_username"/>
+		</collection>
+	</resultMap>
+	<select id="selectAllCountryVo" resultMap="countryVo">
+		SELECT 
+		c.`c_id`, 
+		c.`c_countryname`, 
+		c.`c_capital`, 
+		u.`u_id`,
+		u.`u_username` 
+		FROM country c 
+		LEFT JOIN 
+		USER u ON 
+		u.`u_cid`=c.`c_id`
+	</select>
+  
+  
+  
+  
+	
+</mapper>

@@ -1,4 +1,4 @@
-package mapper1;
+package mapper;
 
 import java.util.List;
 
@@ -29,29 +29,8 @@ public interface UserMapper
 	public void updateUser(User user);
 
 	public void deleteUserById(int id);
-
+	
 	// 通过 UserVo 中的id 查询
-	public User selectUserByUserVoId(UserVo  vo);
-	
-	public Integer selectUserCount();
-	
-	//查询所有用户
-	public List<UserVo> selectAllUserVo();
-	
-	//多条件查询  通过用户对象中的 条件查询用户列表
-	public List<User> selectUserListByUser(User u);
+	public User selectUserByUserVo(UserVo  vo);
 
-	public List<User> selectUserListByUserTrim(User u);
-	
-	//更新用户表
-	public void updateSetUser(User u);
-	
-	//根据id 查询多个用户
-	public List<User> selectUserListByIds(Integer[] ids);
-
-	//根据list 中的数据进行查询
-	public List<User> selectUserListByList(List<Integer> idList);
-	
-	//使用 foreach 来处理 包装类
-	public List<User> selectUserListByUserVo(UserVo uservo);
 }

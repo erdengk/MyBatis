@@ -3,22 +3,52 @@
   PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
+<!-- 读取配置文件 -->
+<properties resource="db.properties"/>
+
+<!-- 推荐使用package进行配置包文件
+		包形式会扫描包里所有的文件 大小写不限  推荐使用小写
+ -->
+<typeAliases>
+	<package name="bean"/>
+</typeAliases>
+
   <environments default="development">
     <environment id="development">
     <!-- 使用jdbc的事务 -->
       <transactionManager type="JDBC"/>
       <dataSource type="POOLED">
       <!-- 配置连接池  http://www.mybatis.org/mybatis-3/zh/getting-started.html-->
-        <property name="driver" value="com.mysql.jdbc.Driver"/>
-        <property name="url" value="jdbc:mysql://localhost:3306/ssm_mybatis?useUnicode=true&amp;characterEncoding=utf-8&amp;useSSL=false"/>
-        <property name="username" value="root"/>
-        <property name="password" value="root"/>
+        <property name="driver" value="${jdbc.driver}"/>
+        <property name="url" value="${jdbc.url}"/>
+        <property name="username" value="${jdbc.username}"/>
+        <property name="password" value="${jdbc.password}"/>
       </dataSource>
     </environment>
   </environments>
+  
   <mappers>
-    <mapper resource="mapper/UserMapper.xml"/>
+  
+  
+  <!--  <mapper resource="mapper/UserMapper.xml"/>  -->
+  <!-- url 绝对路径配置 -->
+  <!-- <mapper url="file:\\\K:\Test\SSM_mybatis\src\mapper\UserMapper.xml" />  -->  
+  <!-- <mapper class="mapper.UserMapper" ></mapper>  -->
+  
+  <!-- 多个mapper 配置 -->
+   <package name="mapper1"/>  
+  
+  <!-- 下面是使用 country 类时 mapper 的url  -->
+<!--  <mapper resource="mapper1/CountryMapper.xml"/> 
+ <mapper resource="mapper1/UserMapper.xml"/> -->
+  
   </mappers>
+  
+
+
+
+  
+  
 </configuration>
 <!-- 如果约束有问题 可以在配置是 加入http网络地址   -->
 

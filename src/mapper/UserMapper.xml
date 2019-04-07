@@ -13,7 +13,7 @@ namespace    动态使用时  mapper1.UserMapper   使用 静态时 UserMapper
 -->
 <mapper namespace="mapper1.UserMapper">
 
-	<select id="selectUserById" parameterType="Integer" resultType="bean.User">
+	<select id="selectUserById" parameterType="Integer" resultType="User">
 		select *from user where u_id=#{id}
 	</select>
 	<!-- 使用占位符 解决sql注入问题   #{}-->
@@ -31,4 +31,12 @@ namespace    动态使用时  mapper1.UserMapper   使用 静态时 UserMapper
 	<delete id="deleteUserById" parameterType="Integer">
 	delete from user where u_id=#{u_id}
 	</delete>
+	
+	
+	<select id="selectUserByUserVoId" parameterType="UserVo" resultType="User">
+		select *from user where u_id=#{user.u_id}
+	</select>
+	<select id="selectUserCount"  resultType="Integer">
+		select count(*) from user 
+	</select>
 </mapper>

@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper 
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--  
+<mapper namespace="UserMapper">
+  <select id="selectBlog" resultType="Blog">
+    select * from Blog where id = #{id}
+  </select>
+</mapper>
+
+namespace    动态使用时  mapper1.UserMapper   使用 静态时 UserMapper
+  
+  
+ 如果在 mapper 中先写了  select 指定的查询id   而 测试类里没有相应的方法   那么测试前面写好的方法都会出现
+ 
+IncompleteElementException: Could not find SQL statement to include with refid 'mapper1.UserMapper.myselect'
+
+这样的错误  
+-->
+<mapper namespace="mapper1.UserMapper">
+	<sql id="myselect">
+		SELECT * 
+		FROM USER 
+	</sql>
+
+	<select id="selectUserById" parameterType="Integer" resultType="User">
+		select *from user where u_id=#{id}
+	</select>
+	<!-- 使用占位符 解决sql注入问题   #{}-->
+	<!--  模糊查询    要使用 ${ value }  -->
+	<select id="selectUserByName" parameterType="String" resultType="bean.User">
+	<!-- select *from user where u_username like "%${value}%" -->
+	select *from user where u_username like "%"#{value}"%"
+	</select>
+	<insert id="insertUser" parameterType="bean.User">	
+	insert into  user values (#{u_id},#{u_username},#{u_password},#{u_sex},#{u_cid})
+	</insert>
+	<update id="updateUser" parameterType="bean.User">
+	update user set u_username=#{u_username} where u_id=#{u_id}
+	</update>
+	<delete id="deleteUserById" parameterType="Integer">
+	delete from user where u_id=#{u_id}
+	</delete>
+	
+	
+	<select id="selectUserByUserVoId" parameterType="UserVo" resultType="User">
+		select *from user where u_id=#{user.u_id}
+	</select>
+	<select id="selectUserCount"  resultType="Integer">
+		select count(*) from user 
+	</select>
+	
+	
+	<!-- if 中判断是否为空  和是否为空串   然后符合条件的之后会拼接到sql语句中 -->
+	<!-- where标签可以解决 类似于    select 。。。  where and 的错误情况 -->
+	<select id="selectUserListByUser" parameterType="User" resultType="User">
+		select *
+		from user
+		<where>
+			<if test="u_sex!=null  and u_sex!='' ">
+			u_sex =#{u_sex}
+			</if>
+			<if test="u_username!=null  and u_username!='' ">
+			and u_username like "%"#{u_username}"%"
+			</if>
+			<if test="u_cid!=null">
+			and u_cid =#{u_cid}
+			</if>
+		</where>
+	</select>
+	<!-- trim 标签用来替换  where   修改 and 的位置 -->
+	<select id="selectUserListByUserTrim" parameterType="User" resultType="User">
+		select *
+		from user
+		<trim prefix="where" suffixOverrides="and">
+			<if test="u_sex!=null  and u_sex!='' ">
+			u_sex =#{u_sex} and
+			</if>
+			<if test="u_username!=null  and u_username!='' ">
+			 u_username like "%"#{u_username}"%" and
+			</if>
+			<if test="u_cid!=null">
+			 u_cid =#{u_cid}  and
+			</if>
+		</trim>
+	</select>
+	
+	<!-- set标签可以去掉前括号 -->
+	<update id="updateSetUser" parameterType="User">
+		update user
+		<set> 
+			<if test="u_username!=null  and u_username!='' ">
+		    u_username = #{u_username},
+			</if>
+			<if test="u_password!=null  and u_password!='' ">
+			u_password = #{u_password},
+			</if>
+			<if test="u_sex!=null  and u_sex!='' ">
+		    u_sex =#{u_sex},
+			</if>
+		</set>
+		where
+		 u_id =#{u_id}
+	</update>
+		<!-- 	//使用多个id获取用户列表
+	public List<User> selectUserListByIds(); (1, 3, 5)-->
+	<select id="selectUserListByList" resultType="User">
+		SELECT * 
+		FROM USER 
+		WHERE u_id 
+		IN 
+		<!-- (1,2,3) -->
+		<foreach collection="list" item="id" open="(" close=")" separator=",">
+			#{id} 
+		</foreach>
+	</select>
+		<!-- 	List<User> selectUserByVo(CountryVo vo); -->
+	<select id="selectUserByVo" parameterType="CountryVo" resultType="User">
+		<include refid="myselect"/>
+		WHERE u_id 
+		IN 
+		<!-- (1,2,3) -->
+		<foreach collection="list" item="id" open="(" close=")" separator=",">
+			#{id} 
+		</foreach>
+	</select>
+	
+	<!--  //使用多个id获取用户列表 by userVO
+	public List<User> selectUserListByUserVo(UserVo vo); -->
+	<select id="selectUserListByUserVo" parameterType="UserVo" resultType="User">
+		<include refid="myselect"/>    <!-- 引用最上面的 sql标签 -->
+		WHERE u_id 
+		IN 
+		<foreach collection="idList" item="id" open="(" close=")" separator=",">
+			#{id} 
+		</foreach>
+	</select>
+
+	
+	
+	
+
+
+	
+</mapper>
